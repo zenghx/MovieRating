@@ -1,0 +1,55 @@
+﻿<Window x:Class="MovieRating.Login"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MovieRating"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Title="登录"
+        BorderThickness="10"        
+        mc:Ignorable="d">
+    <Window.Effect>
+        <DropShadowEffect BlurRadius="10" Color="#FF858484" Direction="90" ShadowDepth="2"/>
+    </Window.Effect>
+    <Window.Resources>
+        <local:Max_RestoreConverter x:Key="mrc" />
+    </Window.Resources>
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}" VerticalAlignment="Stretch" >
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <Label></Label>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <StackPanel>
+                <DockPanel  Background="#42bd56" MouseMove="DockPanel_MouseMove" Height="30">
+                    <Label Foreground="White" VerticalAlignment="Top">
+                        <WrapPanel >
+                            <materialDesign:PackIcon Width="25" Height="25" Kind="Movie" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <TextBlock VerticalAlignment="Center" FontSize="19" Text="登录"/>
+                        </WrapPanel>
+                    </Label>
+                    <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Button x:Name="minW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
+                            <materialDesign:PackIcon Width="25" Height="25" Kind="WindowMinimize" />
+                        </Button>
+                        <Button x:Name="maxW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
+                            <Viewbox  Width="25" Height="25" >
+                                <Canvas Width="24" Height="24" >
+                                    <Path x:Name="pth" Data="{Binding Path=state,Converter={StaticResource mrc}}" Fill="White" />
+                                </Canvas>
+                            </Viewbox> 
+                        </Button>
+                        <Button x:Name="closeW"  Style="{StaticResource close_button}" Click="Window_Click" Width="40">
+                            <materialDesign:PackIcon Width="27" Height="25" Kind="WindowClose" />
+                        </Button>
+                    </WrapPanel>
+                </DockPanel>
+
+                <materialDesign:ColorZone Background="#9942bd56" Padding="16,0,0,16">
+                    <ToggleButton Grid.Column="0" HorizontalAlignment="Left" Foreground="White" x:Name="MenuToggleButton" Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
+                </materialDesign:ColorZone>
+            </StackPanel>
+    </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
+</Window>
