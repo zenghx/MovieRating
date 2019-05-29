@@ -10,7 +10,8 @@
         FontFamily="Segoe UI SemiBold"
         AllowsTransparency="True"
         Title="登录"
-        BorderThickness="10"        
+        BorderThickness="10"      
+        Height="491.5"
         Background="{DynamicResource MaterialDesignPaper}"
         mc:Ignorable="d">
     <Window.Effect>
@@ -21,51 +22,235 @@
     </Window.Resources>
     <materialDesign:DialogHost Identifier="RootDialog">
         <StackPanel>
-                <DockPanel  Background="#008c28" MouseMove="DockPanel_MouseMove" Height="30">
-                    <Label Foreground="White" VerticalAlignment="Top">
-                        <WrapPanel >
-                            <materialDesign:PackIcon Width="25" Height="25" Kind="Movie" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                            <TextBlock VerticalAlignment="Center" FontSize="19" Text="评分系统"/>
-                        </WrapPanel>
-                    </Label>
-                    <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Button x:Name="minW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
-                            <materialDesign:PackIcon Width="25" Height="25" Kind="WindowMinimize" />
-                        </Button>
-                        <Button x:Name="maxW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
-                            <Viewbox  Width="25" Height="25" >
-                                <Canvas Width="24" Height="24" >
-                                    <Path x:Name="pth" Data="{Binding Path=state,Converter={StaticResource mrc}}" Fill="White" />
-                                </Canvas>
-                            </Viewbox>
-                        </Button>
-                        <Button x:Name="closeW"  Style="{StaticResource close_button}" Click="Window_Click" Width="40">
-                            <materialDesign:PackIcon Width="27" Height="25" Kind="WindowClose" />
-                        </Button>
+            <DockPanel  Background="#008c28" MouseMove="DockPanel_MouseMove" Height="30">
+                <Label Foreground="White" VerticalAlignment="Top">
+                    <WrapPanel >
+                        <materialDesign:PackIcon Width="25" Height="25" Kind="Movie" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock VerticalAlignment="Center" FontSize="19" Text="评分系统"/>
                     </WrapPanel>
-                </DockPanel>
-                <dragablz:TabablzControl Foreground="White">
-                    <dragablz:TabablzControl.InterTabController>
-                        <dragablz:InterTabController />
-                    </dragablz:TabablzControl.InterTabController>
-                    <TabItem>
-                        <TabItem.Header>
-                            <TextBlock Foreground="White" Text="HELLO"/>
-                        </TabItem.Header>
-                    </TabItem>
-                    <TabItem>
-                        <TabItem.Header>
-                            <TextBlock Foreground="White" Text="MATERIAL"/>
-                        </TabItem.Header>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Material Design</TextBlock>
-                    </TabItem>
-                    <TabItem>
-                        <TabItem.Header>
-                            <TextBlock Foreground="White" Text="DESIGN"/>
-                        </TabItem.Header>
-                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Looks Quite Nice</TextBlock>
-                    </TabItem>
-                </dragablz:TabablzControl>
-            </StackPanel>
+                </Label>
+                <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="minW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
+                        <materialDesign:PackIcon Width="25" Height="25" Kind="WindowMinimize" />
+                    </Button>
+                    <Button x:Name="maxW"  Style="{StaticResource Button_Menu}" Click="Window_Click">
+                        <Viewbox  Width="25" Height="25" >
+                            <Canvas Width="24" Height="24" >
+                                <Path x:Name="pth" Data="{Binding state, Converter={StaticResource mrc}}" Fill="White" />
+                            </Canvas>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="closeW"  Style="{StaticResource close_button}" Click="Window_Click" Width="40">
+                        <materialDesign:PackIcon Width="27" Height="25" Kind="WindowClose" />
+                    </Button>
+                </WrapPanel>
+            </DockPanel>
+            <dragablz:TabablzControl>
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController />
+                </dragablz:TabablzControl.InterTabController>
+                <TabItem>
+                    <TabItem.Header >
+                        <TextBlock Foreground="White" Text="主页" FontSize="19" VerticalAlignment="Center"/>
+                    </TabItem.Header>
+                    <Grid>
+                    <ScrollViewer x:Name="scr" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxHeight="400"  CanContentScroll="True">
+                        <WrapPanel x:Name="content" HorizontalAlignment="Center" >
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                            <materialDesign:Card Width="220" Margin="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="140" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\titans-finn-vinyl-figure-2.jpg" Height="140" Stretch="UniformToFill" />
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="ShareVariant" />
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                        <TextBlock Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0"><Run Text="E.T. the Extra-Terrestrial"/></TextBlock>
+                                        <Viewbox Margin="0 4 0 8"
+                                             Height="16"
+                                             HorizontalAlignment="Left">
+                                            <materialDesign:RatingBar Value="3"
+                                                                  Orientation="Horizontal"
+                                                                  Foreground="Gold"
+                                                                  Margin="0" />
+                                        </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                               TextWrapping="Wrap"
+                                                VerticalAlignment="Center"><Run Text="After a gentle alien becomes stranded on Earth, the being is discovered and befriended by a young boy named Elliott."/></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+
+                        </WrapPanel>
+                    </ScrollViewer>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Foreground="White" Text="搜索" FontSize="19" VerticalAlignment="Center"/>
+                    </TabItem.Header>
+                    <TextBox
+  x:Name="NameTextBox"
+  materialDesign:HintAssist.Hint="Name" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!--<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Material Design</TextBlock>-->
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Foreground="White" Text="我的" FontSize="19" VerticalAlignment="Center"/>
+                    </TabItem.Header>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="Looks Quite Nice"/></TextBlock>
+                </TabItem>
+            </dragablz:TabablzControl>
+        </StackPanel>
     </materialDesign:DialogHost>
 </Window>
