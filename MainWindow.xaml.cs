@@ -72,5 +72,10 @@ namespace MovieRating
                 this.DragMove();
             }
         }
+
+        private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
