@@ -12,6 +12,7 @@
         Title="登录"
         BorderThickness="10"      
         Height="491.5"
+        Width="720"
         Background="{DynamicResource MaterialDesignPaper}"
         mc:Ignorable="d">
     <Window.Effect>
@@ -54,7 +55,7 @@
                         <TextBlock Foreground="White" Text="主页" FontSize="19" VerticalAlignment="Center"/>
                     </TabItem.Header>
                     <Grid>
-                    <ScrollViewer x:Name="scr" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxHeight="400"  CanContentScroll="True">
+                    <ScrollViewer x:Name="scr" HorizontalScrollBarVisibility="Disabled" MinHeight="0" VerticalScrollBarVisibility="Auto" MaxHeight="400"  CanContentScroll="True">
                         <WrapPanel x:Name="content" HorizontalAlignment="Center" >
                             <materialDesign:Card Width="220" Margin="10">
                                 <Grid>

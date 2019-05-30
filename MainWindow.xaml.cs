@@ -51,7 +51,7 @@ namespace MovieRating
                     Stateobj stateobj = new Stateobj { state = WindowState.Maximized };
                     pth.DataContext = stateobj;
                     BorderThickness = new Thickness(5);
-                    scr.MaxHeight = 10000;
+                    scr.MinHeight = SystemParameters.MaximizedPrimaryScreenHeight;
                     WindowState = WindowState.Maximized;
                 }
                 else if (WindowState == WindowState.Maximized)
@@ -60,6 +60,7 @@ namespace MovieRating
                     pth.DataContext = stateobj;
                     BorderThickness = new Thickness(10);
                     scr.MaxHeight = 400;
+                    scr.MinHeight = 0;
                     WindowState = WindowState.Normal;
                 }
             }
