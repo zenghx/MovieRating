@@ -23,9 +23,6 @@
             <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#ffeb3b"/>
             <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#000000"/>
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
-            <Style x:Key="mdTabHeader" TargetType="{x:Type TabItem}" BasedOn="{StaticResource MaterialDesignDragableTabItemStyle}">
-                <Setter Property="TextElement.Foreground" Value="White"/>
-            </Style>
             <Style x:Key="Button_Menu" TargetType="{x:Type Button}">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Foreground" Value="White"/>
@@ -64,6 +61,70 @@
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Cursor" Value="Hand" />
+            </Style>
+            <Style x:Key="WindowStyle" TargetType="{x:Type local:MainWindow}">
+                <Setter Property="WindowChrome.WindowChrome">
+                    <Setter.Value>
+                        <WindowChrome CornerRadius="0"
+                      GlassFrameThickness="1"
+                      UseAeroCaptionButtons="False"
+                      NonClientFrameEdges="None" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type local:MainWindow}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    x:Name="WindowBorder">
+                                <Grid x:Name="LayoutRoot"
+                                    Background="{TemplateBinding Background}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <DockPanel  Background="#008c28" Height="35">
+                                        <Label Foreground="White" VerticalAlignment="Center">
+                                            <WrapPanel >
+                                                <TextBlock Text="    "/>
+                                                <materialDesign:PackIcon Width="20" Height="20" Kind="Movie" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                                <TextBlock VerticalAlignment="Center" FontSize="19" Text="评分系统"/>
+                                            </WrapPanel>
+                                        </Label>
+                                        <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top">
+                                            <Button x:Name="minW" Height="35" VerticalContentAlignment="Center" Style="{StaticResource Button_Menu}" Command="{Binding Source={x:Static SystemCommands.MinimizeWindowCommand}}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <materialDesign:PackIcon Width="20" Height="20" Kind="WindowMinimize" />
+                                            </Button>
+                                            <Button x:Name="maxW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}" Command="{Binding Source={x:Static SystemCommands.MaximizeWindowCommand}}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <Viewbox  Width="20" Height="20" >
+                                                    <Canvas Width="19" Height="19" >
+                                                        <Path Data="M4,4H20V20H4V4M6,8V18H18V8H6Z" Fill="White" />
+                                                    </Canvas>
+                                                </Viewbox>
+                                            </Button>
+                                            <Button x:Name="resW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}"  WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding Source={x:Static SystemCommands.RestoreWindowCommand}}">
+                                                <Viewbox  Width="20" Height="20" >
+                                                    <Canvas Width="19" Height="19" >
+                                                        <Path Data="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" Fill="White" />
+                                                    </Canvas>
+                                                </Viewbox>
+                                            </Button>
+                                            <Button x:Name="closeW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource close_button}" Width="40" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}">
+                                                <materialDesign:PackIcon Width="20" Height="20" Kind="WindowClose" />
+                                            </Button>
+                                        </WrapPanel>
+                                    </DockPanel>
+                                    <AdornerDecorator Grid.Row="1" KeyboardNavigation.IsTabStop="False">
+                                        <ContentPresenter x:Name="MainContentPresenter"
+                              KeyboardNavigation.TabNavigation="Cycle" />
+                                    </AdornerDecorator>
+                                    
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </ResourceDictionary>
         
