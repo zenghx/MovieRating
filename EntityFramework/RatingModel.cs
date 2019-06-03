@@ -1,9 +1,6 @@
-namespace WpfApp3.EntityFramework
+namespace MovieRating.EntityFramework
 {
-    using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
 
     public partial class RatingModel : DbContext
     {

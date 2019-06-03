@@ -1,18 +1,10 @@
-﻿using System;
+﻿using MovieRating.EntityFramework;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace MovieRating
 {
@@ -20,26 +12,34 @@ namespace MovieRating
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
     /// 
-    public class Stateobj : INotifyPropertyChanged
-    {
-        public WindowState state { set; get; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string propertyName) => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    
+
+
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
-            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             DefaultStyleKey = typeof(MainWindow);
             CommandBindings.Add(new CommandBinding(SystemCommands.CloseWindowCommand, CloseWindow));
             CommandBindings.Add(new CommandBinding(SystemCommands.MaximizeWindowCommand, MaximizeWindow, CanResizeWindow));
             CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, MinimizeWindow, CanMinimizeWindow));
             CommandBindings.Add(new CommandBinding(SystemCommands.RestoreWindowCommand, RestoreWindow, CanResizeWindow));
-            CommandBindings.Add(new CommandBinding(SystemCommands.ShowSystemMenuCommand, ShowSystemMenu));      
+            CommandBindings.Add(new CommandBinding(SystemCommands.ShowSystemMenuCommand, ShowSystemMenu));
             InitializeComponent();
+            IndexBinding();
+        }
+        private void IndexBinding()
+        {
+            using (var model = new RatingModel())
+            {
+                Random random = new Random();
+                List<int> Id = new List<int>();
+                for (int i = 0; i < 8; i++)
+                    Id.Add(random.Next(1, 1682));
+                var items = model.item.Include("ratings")
+                    .Where(i => Id.Contains(i.movieId)).ToList();
+                indexContent.DataContext = items;
+            }
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -104,42 +104,25 @@ namespace MovieRating
 
         #endregion
 
-        private void Window_Click(object sender, RoutedEventArgs e)
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as Button;
-            if (btn.Name == "minW")
-            { WindowState = WindowState.Minimized; }
-            else if (btn.Name == "maxW")
-            {
-                if (WindowState == WindowState.Normal)
-                {
-                    Stateobj stateobj = new Stateobj { state = WindowState.Maximized };
-                    BorderThickness = new Thickness(5);
-                    scr.MinHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-                    WindowState = WindowState.Maximized;
-                }
-                else if (WindowState == WindowState.Maximized)
-                {
-                    Stateobj stateobj = new Stateobj { state = WindowState.Normal };
-                    BorderThickness = new Thickness(10);
-                    scr.MaxHeight = 400;
-                    scr.MinHeight = 0;
-                    WindowState = WindowState.Normal;
-                }
-            }
-            else if (btn.Name == "closeW")
-            { this.Close(); }
+            IndexBinding();
         }
 
-        private void DockPanel_MouseMove(object sender, MouseEventArgs e)
+        private void Search_Click(object sender, RoutedEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                this.DragMove();
-            }
+            var model = new RatingModel();
+            var res = model.item.Where(it => it.movieTitle.Contains(searchBox.Text)).ToList();
+            searchRes.DataContext = res;
         }
 
-        private void TabablzControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
 
         }

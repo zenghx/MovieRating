@@ -7,10 +7,13 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <!--MD Color设置-->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- primary -->
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#79f085"/>
@@ -22,7 +25,9 @@
             <!-- accent -->
             <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#ffeb3b"/>
             <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#000000"/>
+            <!--Dragablz 样式设置-->
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+            <!--标题栏按钮变色-->
             <Style x:Key="Button_Menu" TargetType="{x:Type Button}">
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Foreground" Value="White"/>
@@ -41,7 +46,6 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Cursor" Value="Hand" />
             </Style>
             <Style x:Key="close_button" TargetType="{x:Type Button}">
                 <Setter Property="BorderThickness" Value="0" />
@@ -60,15 +64,92 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Cursor" Value="Hand" />
             </Style>
+            <!--Converters-->
+            <local:Max_RestoreConverter x:Key="mrc" />
+            <local:Title2ImgConverter x:Key="tt2img"/>
+            <local:ScoreCalculatorConverter x:Key="scc"/>
+            <local:RatingCountConverter x:Key="rtc"/>
+            <local:GenreConverter x:Key="genrec"/>
+            <local:DateConverter x:Key="datec"/>
+            <local:AdminConverter x:Key="adc"/>
+            <DataTemplate x:Key="itemTemplate">
+                    <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}"
+                                                    Margin="10"
+                                                    IsFlippedChanged="Flipper_OnIsFlippedChanged">
+                        <materialDesign:Flipper.FrontContent>
+                            <materialDesign:Card Width="200" >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="300" />
+                                        <RowDefinition Height="200" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="{Binding movieTitle,Converter={StaticResource tt2img}}" Height="300" Stretch="UniformToFill"/>
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                                    Visibility="{Binding Converter={StaticResource adc}}"
+                                                    Margin="0 0 16 -20">
+                                        <materialDesign:PackIcon Kind="Edit" Height="20" Width="20" Foreground="Black"/>
+                                    </Button>
+                                    <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                    <TextBlock TextWrapping="Wrap" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0">
+                                                                <Run Text="{Binding movieTitle}" />
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding  ratings,Converter={StaticResource scc},StringFormat='均分：{0}'}" FontSize="20"/>
+                                    <TextBlock Text="{Binding ratings,Converter={StaticResource rtc},StringFormat='评分人数：{0}'}" FontSize="10" Foreground="Gray"/>
+                                    <Viewbox Margin="0 4 0 8"
+                                                         Height="16"
+                                                         HorizontalAlignment="Left">
+                                        <materialDesign:RatingBar Orientation="Horizontal"  Foreground="Gold" Margin="0" ValueChanged="RatingBar_ValueChanged"/>
+                                    </Viewbox>
+                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                                           TextWrapping="Wrap" VerticalAlignment="Center"
+                                                           Text="{Binding genre,Converter={StaticResource genrec}}"/>
+                                    <TextBlock Text="{Binding releaseDate,Converter={StaticResource datec},StringFormat='发行日期：{0}'}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </materialDesign:Card>
+                        </materialDesign:Flipper.FrontContent>
+                        <materialDesign:Flipper.BackContent>
+                            <materialDesign:Card Width="200">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="200" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image Source="C:\Users\zengh\Desktop\0RSWVK1X.jpg" Height="200" Stretch="UniformToFill"/>
+                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                                    Margin="0 0 16 -20"
+                                                    Click="Button_Click">
+                                        <materialDesign:PackIcon Kind="Check" Height="20" Width="20"/>
+                                    </Button>
+                                <StackPanel Grid.Row="1" Margin="8 24 8 4">
+                                    <TextBlock x:Name="movieId" Text="{Binding movieId,StringFormat='ID:{0}'}"/>
+                                        <TextBlock Text="标题："/>
+                                    <TextBox x:Name="mTitle"  Text="{Binding movieTitle}"/>
+                                    <TextBlock Text="发行日期："/>
+                                        <TextBox x:Name="nReleaseD"  Text="{Binding releaseDate,Converter={StaticResource datec}}"/>
+                                    <TextBlock Text="类型："/>
+                                    <TextBox x:Name="mGenre"  Text="{Binding genre,Converter={StaticResource genrec}}"/>
+                                </StackPanel>
+                            </Grid>
+                            </materialDesign:Card>
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </DataTemplate>
+            <ItemsPanelTemplate x:Key="itemsPanelTemplate">
+                <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </ItemsPanelTemplate>
+            <!--使用WindowChrome自定义窗体-->
             <Style x:Key="WindowStyle" TargetType="{x:Type local:MainWindow}">
                 <Setter Property="WindowChrome.WindowChrome">
                     <Setter.Value>
-                        <WindowChrome CornerRadius="0"
-                      GlassFrameThickness="1"
-                      UseAeroCaptionButtons="False"
-                      NonClientFrameEdges="None" />
+                        <WindowChrome CornerRadius="0" GlassFrameThickness="0" UseAeroCaptionButtons="False" CaptionHeight="35" NonClientFrameEdges="None" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Template">
@@ -78,13 +159,14 @@
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     x:Name="WindowBorder">
                                 <Grid x:Name="LayoutRoot"
-                                    Background="{TemplateBinding Background}">
+                                      MaxHeight="{Binding Source={x:Static SystemParameters.WorkArea},Path=Height}"
+                                      MaxWidth="{Binding Source={x:Static SystemParameters.WorkArea},Path=Width}"
+                                      Background="{TemplateBinding Background}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-
-                                    <DockPanel  Background="#008c28" Height="35">
+                                    <DockPanel  Background="#008c28" Height="35" Grid.Row="0">
                                         <Label Foreground="White" VerticalAlignment="Center">
                                             <WrapPanel >
                                                 <TextBlock Text="    "/>
@@ -92,34 +174,41 @@
                                                 <TextBlock VerticalAlignment="Center" FontSize="19" Text="评分系统"/>
                                             </WrapPanel>
                                         </Label>
-                                        <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top">
-                                            <Button x:Name="minW" Height="35" VerticalContentAlignment="Center" Style="{StaticResource Button_Menu}" Command="{Binding Source={x:Static SystemCommands.MinimizeWindowCommand}}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <WrapPanel  HorizontalAlignment="Right" VerticalAlignment="Top" WindowChrome.IsHitTestVisibleInChrome="True">
+                                            <Button x:Name="minW" Height="35" VerticalContentAlignment="Center" Style="{StaticResource Button_Menu}" 
+                                                    HorizontalContentAlignment="Center"
+                                                    Command="{Binding Source={x:Static SystemCommands.MinimizeWindowCommand}}" >
                                                 <materialDesign:PackIcon Width="20" Height="20" Kind="WindowMinimize" />
                                             </Button>
-                                            <Button x:Name="maxW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}" Command="{Binding Source={x:Static SystemCommands.MaximizeWindowCommand}}" WindowChrome.IsHitTestVisibleInChrome="True">
-                                                <Viewbox  Width="20" Height="20" >
-                                                    <Canvas Width="19" Height="19" >
+                                            <Button x:Name="maxW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}" 
+                                                    Command="{Binding Source={x:Static SystemCommands.MaximizeWindowCommand}}" 
+                                                    HorizontalContentAlignment="Center"
+                                                    Visibility="{TemplateBinding WindowState,Converter={StaticResource mrc},ConverterParameter=MaxButton}">
+                                                <Viewbox  Width="20" Height="20" HorizontalAlignment="Center">
+                                                    <Canvas Width="20" Height="20" HorizontalAlignment="Center" >
                                                         <Path Data="M4,4H20V20H4V4M6,8V18H18V8H6Z" Fill="White" />
                                                     </Canvas>
                                                 </Viewbox>
                                             </Button>
-                                            <Button x:Name="resW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}"  WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding Source={x:Static SystemCommands.RestoreWindowCommand}}">
-                                                <Viewbox  Width="20" Height="20" >
-                                                    <Canvas Width="19" Height="19" >
+                                            <Button x:Name="resW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource Button_Menu}"  
+                                                    HorizontalContentAlignment="Center" Visibility="{TemplateBinding WindowState,Converter={StaticResource mrc},ConverterParameter=RestoreButton}"
+                                                    Command="{Binding Source={x:Static SystemCommands.RestoreWindowCommand}}">
+                                                <Viewbox  Width="20" Height="20" HorizontalAlignment="Center">
+                                                    <Canvas Width="20" Height="20" HorizontalAlignment="Center" >
                                                         <Path Data="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" Fill="White" />
                                                     </Canvas>
                                                 </Viewbox>
                                             </Button>
-                                            <Button x:Name="closeW" Height="35" VerticalContentAlignment="Center"  Style="{StaticResource close_button}" Width="40" WindowChrome.IsHitTestVisibleInChrome="True" Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}">
+                                            <Button x:Name="closeW" Height="35" VerticalContentAlignment="Center" 
+                                                    HorizontalContentAlignment="Center"  Style="{StaticResource close_button}" 
+                                                    Width="40" Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}">
                                                 <materialDesign:PackIcon Width="20" Height="20" Kind="WindowClose" />
                                             </Button>
                                         </WrapPanel>
                                     </DockPanel>
                                     <AdornerDecorator Grid.Row="1" KeyboardNavigation.IsTabStop="False">
-                                        <ContentPresenter x:Name="MainContentPresenter"
-                              KeyboardNavigation.TabNavigation="Cycle" />
+                                        <ContentPresenter x:Name="MainContentPresenter" KeyboardNavigation.TabNavigation="Cycle" />
                                     </AdornerDecorator>
-                                    
                                 </Grid>
                             </Border>
                         </ControlTemplate>
@@ -127,6 +216,5 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-        
     </Application.Resources>
 </Application>

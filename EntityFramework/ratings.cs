@@ -1,10 +1,7 @@
-namespace WpfApp3.EntityFramework
+namespace MovieRating.EntityFramework
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     public partial class ratings
     {
@@ -19,8 +16,8 @@ namespace WpfApp3.EntityFramework
         public int movieId { get; set; }
 
         [Key]
-        [Column("ratings", Order = 2)]
-        public byte ratings1 { get; set; }
+        [Column("rating", Order = 2)]
+        public byte rating { get; set; }
 
         [Key]
         [Column(Order = 3, TypeName = "timestamp")]
