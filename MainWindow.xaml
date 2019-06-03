@@ -17,7 +17,7 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
     </Window.Resources>
     <materialDesign:DialogHost Identifier="RootDialog">
-            <dragablz:TabablzControl>
+            <dragablz:TabablzControl x:Name="tab" SelectionChanged="Tab_SelectionChanged" >
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController />
                 </dragablz:TabablzControl.InterTabController>
@@ -81,22 +81,22 @@
                     </TabItem.Header>
                 <StackPanel Margin="10">
                     <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}">
-                        <Expander Header="个人信息(uid:22)">
+                        <Expander Header="{Binding StringFormat='个人信息(uid:{0})'}" x:Name="header" >
                             <StackPanel>
                             <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
                                 <ComboBox x:Name="gender" materialDesign:HintAssist.Hint="性别"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   materialDesign:HintAssist.HintOpacity=".26"
                                   Margin="5" FontSize="15">
-                                    <ComboBoxItem Content="男"/>
-                                    <ComboBoxItem Content="女"/>
+                                    <ComboBoxItem Content="M"/>
+                                    <ComboBoxItem Content="F"/>
                                 </ComboBox>
                                 <ComboBox x:Name="occupation" IsEditable="True" FontSize="15" materialDesign:HintAssist.Hint="职业"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   materialDesign:HintAssist.HintOpacity=".26"
-                                  Margin="15,0,15,0" ItemsSource="{Binding}"/>
+                                  Margin="15,0,15,0"/>
                                 <ComboBox x:Name="age" FontSize="15" IsEditable="True" materialDesign:HintAssist.Hint="年龄"
-                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                                   materialDesign:HintAssist.HintOpacity=".26"
                                   Margin="15,0,15,0">
                                     <ComboBox.ItemsPanel>

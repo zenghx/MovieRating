@@ -1,4 +1,5 @@
-﻿using MovieRating.EntityFramework;
+﻿using MaterialDesignThemes.Wpf;
+using MovieRating.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace MovieRating
 
     public partial class MainWindow : Window
     {
-
+        private int lastSelectionIndex = 0;
         public MainWindow()
         {
             DefaultStyleKey = typeof(MainWindow);
@@ -112,9 +113,12 @@ namespace MovieRating
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            var model = new RatingModel();
-            var res = model.item.Where(it => it.movieTitle.Contains(searchBox.Text)).ToList();
-            searchRes.DataContext = res;
+            using (var model = new RatingModel())
+            {
+                var res = model.item.Include("ratings").Where(it => it.movieTitle.Contains(searchBox.Text)).ToList();
+                searchRes.DataContext = res;
+            }
+            
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -125,6 +129,35 @@ namespace MovieRating
         private void Save_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void UserBinding()
+        {
+            using (var model = new RatingModel())
+            {
+                var item = model.item.Include("ratings")
+                    .Where(it=>it.ratings.Any(rt=>rt.userId==Userinfo.currentUser)).ToList();
+                myRating.DataContext = item;
+                var usr = model.user.Find(Userinfo.currentUser);
+
+                zipcode.Text = usr.zipcode;
+            }
+        }
+
+        private void Tab_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if(Userinfo.currentUser== 37787)
+            { 
+                if (tab.SelectedIndex == 2)
+                {
+                    tab.SelectedIndex = lastSelectionIndex;
+                    var login = new LoginPopup ();
+                    DialogHost.Show(login, "RootDialog");
+                }
+                //tab.SelectedIndex = 2;
+                //UserBinding();
+            }
+            lastSelectionIndex = tab.SelectedIndex;
         }
     }
 }
