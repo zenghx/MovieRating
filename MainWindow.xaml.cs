@@ -135,12 +135,22 @@ namespace MovieRating
         {
             using (var model = new RatingModel())
             {
-                var item = model.item.Include("ratings")
-                    .Where(it=>it.ratings.Any(rt=>rt.userId==Userinfo.currentUser)).ToList();
-                myRating.DataContext = item;
-                var usr = model.user.Find(Userinfo.currentUser);
-
-                zipcode.Text = usr.zipcode;
+                //var item = model.ratings.Include("item")
+                //    .Where(r=>r.userId==Userinfo.currentUser).Select(i=>i.item).Distinct().ToList();
+                var itm = from p in model.item
+                          join r in model.ratings on p.movieId equals r.movieId
+                          where r.userId == Userinfo.currentUser
+                          select p;
+                var ls = itm.ToList();
+                Random random = new Random();
+                List<item> items = new List<item>();
+                for(int i=0;i<10;i++)
+                {
+                    items.Add(ls[random.Next(0,ls.Count-1)]);
+                }
+                myRating.DataContext = items;
+                //var usr = model.user.Find(Userinfo.currentUser);
+                //zipcode.Text = usr.zipcode;
             }
         }
 
@@ -155,9 +165,14 @@ namespace MovieRating
                     DialogHost.Show(login, "RootDialog");
                 }
                 //tab.SelectedIndex = 2;
-                //UserBinding();
+                
+                lastSelectionIndex = tab.SelectedIndex;
             }
-            lastSelectionIndex = tab.SelectedIndex;
+            else
+            {
+                UserBinding();
+            }
+            
         }
     }
 }

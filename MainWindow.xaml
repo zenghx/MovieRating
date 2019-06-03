@@ -80,6 +80,8 @@
                         <TextBlock Foreground="White" Text="我的" FontSize="19" VerticalAlignment="Center"/>
                     </TabItem.Header>
                 <StackPanel Margin="10">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                        <StackPanel>
                     <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}">
                         <Expander Header="{Binding StringFormat='个人信息(uid:{0})'}" x:Name="header" >
                             <StackPanel>
@@ -114,13 +116,14 @@
                             </StackPanel>
                         </Expander>
                     </materialDesign:Card>
-                    <Border Grid.Row="2" Background="{DynamicResource MaterialDesignDivider}" Height="1" 
+                    <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" 
                             HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
                     <TextBlock Text="我评过的影片" FontSize="20" Margin="0,5,0,0"/>
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" >
+                    
                         <ItemsControl x:Name="myRating"  ItemsSource="{Binding}" 
                                       ItemTemplate="{StaticResource itemTemplate}"
                                       ItemsPanel="{StaticResource itemsPanelTemplate}"/>
+                        </StackPanel>
                     </ScrollViewer>
                     <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
