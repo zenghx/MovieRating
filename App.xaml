@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:MovieRating"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:tk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -84,7 +85,7 @@
                                         <RowDefinition Height="300" />
                                         <RowDefinition Height="200" />
                                     </Grid.RowDefinitions>
-                                    <Image Source="{Binding movieTitle,Converter={StaticResource tt2img}}" Height="300" Stretch="UniformToFill"/>
+                                    <Image Source="{Binding movieTitle,Converter={StaticResource tt2img},IsAsync=True}" Height="300" Stretch="UniformToFill"/>
                                     <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Bottom"
@@ -143,6 +144,8 @@
                     </materialDesign:Flipper>
                 </DataTemplate>
             <ItemsPanelTemplate x:Key="itemsPanelTemplate">
+                <!--<tk:VirtualizingWrapPanel/>-->
+                
                 <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </ItemsPanelTemplate>
             <!--使用WindowChrome自定义窗体-->

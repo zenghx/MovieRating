@@ -20,3 +20,17 @@
 在尝试使用Entity Framework时，还在用老脑筋去思考，弄了半天联接两个表进行查询，Jion方法鼓捣了半天，Include方法也鼓捣了半天，后来才发现EF里的实体定义的时候已经包含了所有相关的内容，就是说已经通过主外键连接好了，不需要自己再折腾了。
 
 做到影片类别的时候发现设计的数据库挺蠢的，每一个类别都用一个Boolean表示，在Binding到Converter的时候就得Multi Binding十九个变量，太麻烦了，后来处理了一下数据，将类别信息转换为十九位的01字串，处理起来就好多了。
+
+https://stackoverflow.com/questions/3520713/programmatically-raise-a-command 
+
+https://www.codercto.com/a/52275.html
+
+ [EntityFramework之异步、事务及性能优化（九）](https://www.cnblogs.com/CreateMyself/p/4787856.html)
+
+ https://www.chengxulvtu.com/entityframework-nested-query/
+
+ https://www.cnblogs.com/zhchbin/archive/2012/03/06/2381693.html
+
+ https://stackoverflow.com/a/34400406
+
+ 随机数重复，范围较小

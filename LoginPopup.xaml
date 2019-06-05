@@ -14,7 +14,6 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="登录" FontSize="50" HorizontalAlignment="Center"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
@@ -24,8 +23,10 @@
         <PasswordBox Style="{StaticResource MaterialDesignFilledPasswordFieldPasswordBox}"
                      Grid.Row="2" Margin="20" x:Name="pwd"
                      materialDesign:HintAssist.Hint="密码" />
-
-        <Button x:Name="btn" Grid.Row="3" Content="登录" Foreground="White" Style="{StaticResource MaterialDesignRaisedButton}" Margin="5" Click="Login_Click"/>
+        <Button x:Name="btn" Grid.Row="3" Content="登录" IsDefault="True" Foreground="White" Style="{StaticResource MaterialDesignRaisedButton}" Margin="5" Click="Login_Click"/>
         <Button x:Name="close" Height="0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+        <materialDesign:Snackbar Grid.Row="3" x:Name="SnackBar">
+            <materialDesign:SnackbarMessage Content="登录信息有误！" />
+        </materialDesign:Snackbar>
     </Grid>
 </UserControl>
