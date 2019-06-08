@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:MovieRating"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:tk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -73,13 +72,15 @@
             <local:RatingCountConverter x:Key="rtc"/>
             <local:GenreConverter x:Key="genrec"/>
             <local:DateConverter x:Key="datec"/>
+            <local:LoginConverter x:Key="lgc"/>
+            <local:RatingBarValueConverter x:Key="rtbvc"/>
             <local:AdminConverter x:Key="adc"/>
             <DataTemplate x:Key="itemTemplate">
                     <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}"
                                                     Margin="10"
                                                     IsFlippedChanged="Flipper_OnIsFlippedChanged">
                         <materialDesign:Flipper.FrontContent>
-                            <materialDesign:Card Width="200" >
+                            <materialDesign:Card Width="210" >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="300" />
@@ -95,38 +96,35 @@
                                         <materialDesign:PackIcon Kind="Edit" Height="20" Width="20" Foreground="Black"/>
                                     </Button>
                                     <StackPanel Grid.Row="1" Margin="8 24 8 4">
-                                    <TextBlock TextWrapping="Wrap" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0">
-                                                                <Run Text="{Binding movieTitle}" />
-                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Style="{StaticResource MaterialDesignSubheadingTextBlock}" Margin="0" x:Name="RTT" Text="{Binding movieTitle}"/>
                                     <TextBlock Text="{Binding  ratings,Converter={StaticResource scc},StringFormat='均分：{0}'}" FontSize="20"/>
                                     <TextBlock Text="{Binding ratings,Converter={StaticResource rtc},StringFormat='评分人数：{0}'}" FontSize="10" Foreground="Gray"/>
-                                    <Viewbox Margin="0 4 0 8"
+                                    <Viewbox Margin="0 4 0 8" 
                                                          Height="16"
                                                          HorizontalAlignment="Left">
-                                        <materialDesign:RatingBar Orientation="Horizontal"  Foreground="Gold" Margin="0" ValueChanged="RatingBar_ValueChanged"/>
+                                        <materialDesign:RatingBar Orientation="Horizontal"  Foreground="Gold" Margin="0"
+                                                                  ValueChanged="RatingBar_ValueChanged"
+                                                                  Tag="{Binding movieId}"
+                                                                  Value="{Binding ratings,Converter={StaticResource rtbvc}}"
+                                                                  Visibility="{Binding Converter={StaticResource lgc}}"/>
                                     </Viewbox>
-                                        <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                        <TextBlock x:Name="genre" Style="{StaticResource MaterialDesignBody1TextBlock}"
                                                            TextWrapping="Wrap" VerticalAlignment="Center"
                                                            Text="{Binding genre,Converter={StaticResource genrec}}"/>
-                                    <TextBlock Text="{Binding releaseDate,Converter={StaticResource datec},StringFormat='发行日期：{0}'}"/>
+                                    <TextBlock x:Name="releaseD" Text="{Binding releaseDate,Converter={StaticResource datec},StringFormat='发行日期：{0}'}"/>
                                     </StackPanel>
                                 </Grid>
                             </materialDesign:Card>
                         </materialDesign:Flipper.FrontContent>
                         <materialDesign:Flipper.BackContent>
-                            <materialDesign:Card Width="200">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="200" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Image Source="C:\Users\zengh\Desktop\0RSWVK1X.jpg" Height="200" Stretch="UniformToFill"/>
-                                    <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                            <materialDesign:Card Width="210">
+                                <StackPanel>
+                                <Button Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Bottom"
                                                     Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                                     Margin="0 0 16 -20"
-                                                    Click="Button_Click">
+                                                    Click="Modify_Click">
                                         <materialDesign:PackIcon Kind="Check" Height="20" Width="20"/>
                                     </Button>
                                 <StackPanel Grid.Row="1" Margin="8 24 8 4">
@@ -138,14 +136,12 @@
                                     <TextBlock Text="类型："/>
                                     <TextBox x:Name="mGenre"  Text="{Binding genre,Converter={StaticResource genrec}}"/>
                                 </StackPanel>
-                            </Grid>
-                            </materialDesign:Card>
+                                </StackPanel>
+                        </materialDesign:Card>
                         </materialDesign:Flipper.BackContent>
                     </materialDesign:Flipper>
                 </DataTemplate>
             <ItemsPanelTemplate x:Key="itemsPanelTemplate">
-                <!--<tk:VirtualizingWrapPanel/>-->
-                
                 <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </ItemsPanelTemplate>
             <!--使用WindowChrome自定义窗体-->

@@ -90,9 +90,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VirtualizingWrapPanel, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\VirtualizingWrapPanel.1.2.2\lib\net45\VirtualizingWrapPanel.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -187,7 +184,6 @@
       <DependentUpon>MovieLens.mdf</DependentUpon>
     </Content>
     <SplashScreen Include="Resources\SplashScreen.png" />
-    <Content Include="template\styles\main.css" />
     <Resource Include="Resources\noImg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

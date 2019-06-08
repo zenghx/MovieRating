@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:MovieRating"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             MinWidth="300"
             >
     <Grid>
         <Grid.RowDefinitions>
@@ -15,15 +14,15 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="登录" FontSize="50" HorizontalAlignment="Center"/>
+        <Label Content="登录" FontSize="40" HorizontalAlignment="Center"/>
         <TextBox Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
-                 Margin="20" x:Name="uid"
+                 Margin="10" x:Name="uid"
                  MaxWidth="400" Grid.Row="1"
                  materialDesign:HintAssist.Hint="用户ID" />
         <PasswordBox Style="{StaticResource MaterialDesignFilledPasswordFieldPasswordBox}"
-                     Grid.Row="2" Margin="20" x:Name="pwd"
+                     Grid.Row="2" Margin="10" x:Name="pwd"
                      materialDesign:HintAssist.Hint="密码" />
-        <Button x:Name="btn" Grid.Row="3" Content="登录" IsDefault="True" Foreground="White" Style="{StaticResource MaterialDesignRaisedButton}" Margin="5" Click="Login_Click"/>
+        <Button x:Name="btn" Grid.Row="3" Content="登录" IsDefault="True" Foreground="White" Style="{StaticResource MaterialDesignRaisedButton}" Margin="10" Click="Login_Click"/>
         <Button x:Name="close" Height="0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
         <materialDesign:Snackbar Grid.Row="3" x:Name="SnackBar">
             <materialDesign:SnackbarMessage Content="登录信息有误！" />

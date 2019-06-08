@@ -16,18 +16,18 @@
     <Window.Resources>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
     </Window.Resources>
-    <materialDesign:DialogHost Identifier="RootDialog">
+    <materialDesign:DialogHost Identifier="RootDialog"  >
             <dragablz:TabablzControl x:Name="tab" SelectionChanged="Tab_SelectionChanged" >
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController />
                 </dragablz:TabablzControl.InterTabController>
-                <TabItem>
+                <TabItem x:Name="index">
                     <TabItem.Header >
                         <TextBlock Foreground="White" Text="主页" FontSize="19" VerticalAlignment="Center"/>
                     </TabItem.Header>
                 <Grid>
                     <ScrollViewer x:Name="scr" VerticalScrollBarVisibility="Auto" >
-                        <ItemsControl x:Name="indexContent"  ItemsSource="{Binding IsAsync=True}" 
+                        <ItemsControl x:Name="indexContent"  ItemsSource="{Binding}" 
                                       ItemTemplate="{StaticResource itemTemplate}"
                                       ItemsPanel="{StaticResource itemsPanelTemplate}"
                                       VirtualizingPanel.VirtualizationMode="Recycling"
@@ -35,9 +35,9 @@
                     </ScrollViewer>
                 <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Margin="0,0,30,10" ToolTip="刷新" Click="Refresh_Click"
+                                Margin="0,0,30,10" ToolTip="重新随机获取" Click="Shuffle_Click"
                                 >
-                    <materialDesign:PackIcon Kind="Refresh" Foreground="Black" Height="40" Width="40"/>
+                        <materialDesign:PackIcon Kind="Shuffle" Foreground="Black" Height="40" Width="40"/>
                 </Button>
                 </Grid>
             </TabItem>
@@ -75,7 +75,7 @@
                         </materialDesign:ColorZone>
                     <Label x:Name="ResString" Grid.Row="1" FontSize="20" Margin="5,0,0,0"/>
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" >
-                        <ItemsControl x:Name="searchRes"  ItemsSource="{Binding}" 
+                        <ItemsControl x:Name="searchRes"  ItemsSource="{Binding IsAsync=True}" 
                                       ItemTemplate="{StaticResource itemTemplate}"
                                       ItemsPanel="{StaticResource itemsPanelTemplate}"
                                       VirtualizingPanel.VirtualizationMode="Recycling"
@@ -97,16 +97,16 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}">
-                        <Expander Header="{Binding StringFormat='个人信息(uid:{0})'}" x:Name="expander" >
-                            <StackPanel>
-                            <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-                                <ComboBox x:Name="gender" materialDesign:HintAssist.Hint="性别"
+                                <Expander Header="{Binding StringFormat='个人信息(uid:{0})'}" x:Name="expander" >
+                                    <StackPanel>
+                                        <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                                            <ComboBox x:Name="gender" materialDesign:HintAssist.Hint="性别"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   materialDesign:HintAssist.HintOpacity=".26"
                                   Margin="5" FontSize="15">
-                                    <ComboBoxItem Content="男"/>
-                                    <ComboBoxItem Content="女"/>
-                                </ComboBox>
+                                                <ComboBoxItem Content="男"/>
+                                                <ComboBoxItem Content="女"/>
+                                            </ComboBox>
                                             <ComboBox x:Name="occupation" IsEditable="True" FontSize="15" materialDesign:HintAssist.Hint="职业"
                                   Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                   materialDesign:HintAssist.HintOpacity=".26" ItemsSource="{Binding}"
@@ -121,32 +121,31 @@
                                   Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                                   materialDesign:HintAssist.HintOpacity=".26" MinWidth="40"
                                   Margin="15,5,15,5">
-                                </TextBox>
-                                <TextBox x:Name="zipcode" MinWidth="80" FontSize="15"
+                                            </TextBox>
+                                            <TextBox x:Name="zipcode" MinWidth="80" FontSize="15"
                                  materialDesign:HintAssist.Hint="邮编" materialDesign:HintAssist.HintOpacity=".26"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                  Margin="5"/>
-                            </WrapPanel>
-                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="保存" Width="100" Click="Save_Click"/>
-                            </StackPanel>
-                        </Expander>
-                    </materialDesign:Card>
+                                        </WrapPanel>
+                                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="保存" Width="100" Click="Save_Click"/>
+                                    </StackPanel>
+                                </Expander>
+                            </materialDesign:Card>
                             <Border Grid.Row="1" Background="{DynamicResource MaterialDesignDivider}" Height="1" 
                             HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
-                            <TextBlock Grid.Row="2" Text="我评过的影片" FontSize="20" Margin="0,5,0,0"/>
-                    
-                        <ItemsControl Grid.Row="3" x:Name="myRating"  ItemsSource="{Binding IsAsync=True}" 
+                            <TextBlock Grid.Row="2" x:Name="ratingCount" FontSize="20" Margin="0,5,0,0"/>
+
+                            <ItemsControl Grid.Row="3" x:Name="myRating"  ItemsSource="{Binding IsAsync=True}" 
                                       ItemTemplate="{StaticResource itemTemplate}"
                                       ItemsPanel="{StaticResource itemsPanelTemplate}"
-                                      VirtualizingPanel.IsVirtualizing="True"
-                                      VirtualizingPanel.VirtualizationMode="Recycling"/>
+                                      />
                         </Grid>
                     </ScrollViewer>
-                    <Button  Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                    <Button Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
                                 VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                Margin="0,0,30,10" ToolTip="添加电影条目" Click="Add_Click"
+                                Margin="0,0,30,10" ToolTip="刷新" Click="RefreshU_Click"
                                 >
-                        <materialDesign:PackIcon Kind="Add" Foreground="Black" Height="40" Width="40"/>
+                        <materialDesign:PackIcon Kind="Refresh" Foreground="Black" Height="40" Width="40"/>
                     </Button>
                 </Grid>
             </TabItem>

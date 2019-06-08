@@ -15,11 +15,9 @@ namespace MovieRating.EntityFramework
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int movieId { get; set; }
 
-        [Key]
         [Column("rating", Order = 2)]
         public byte rating { get; set; }
 
-        [Key]
         [Column(Order = 3, TypeName = "timestamp")]
         [MaxLength(8)]
         [Timestamp]

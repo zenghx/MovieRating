@@ -2,10 +2,11 @@
 using MovieRating.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.ComponentModel;
 
 
 namespace MovieRating
@@ -20,6 +21,7 @@ namespace MovieRating
     {
         private int lastSelectionIndex = 0;
         private LoginPopup login;
+        private BackgroundWorker worker;
 
         public MainWindow()
         {
@@ -41,7 +43,10 @@ namespace MovieRating
                 Random random = new Random();
                 List<int> Id = new List<int>();
                 for (int i = 0; i < 8; i++)
+                {
                     Id.Add(random.Next(1, 1682));
+                }
+
                 var items = model.item.Include("ratings")
                     .Where(i => Id.Contains(i.movieId)).ToList();
                 indexContent.DataContext = items;
@@ -52,14 +57,18 @@ namespace MovieRating
         {
             base.OnMouseLeftButtonDown(e);
             if (e.ButtonState == MouseButtonState.Pressed)
+            {
                 DragMove();
+            }
         }
 
         protected override void OnContentRendered(EventArgs e)
         {
             base.OnContentRendered(e);
             if (SizeToContent == SizeToContent.WidthAndHeight)
+            {
                 InvalidateMeasure();
+            }
         }
 
         #region Window Commands
@@ -100,7 +109,9 @@ namespace MovieRating
         {
             var element = e.OriginalSource as FrameworkElement;
             if (element == null)
+            {
                 return;
+            }
 
             var point = WindowState == WindowState.Maximized ? new Point(0, element.ActualHeight)
                 : new Point(Left + BorderThickness.Left, element.ActualHeight + Top + BorderThickness.Top);
@@ -110,13 +121,15 @@ namespace MovieRating
 
         #endregion
 
-        private void Refresh_Click(object sender, RoutedEventArgs e)
+        private void Shuffle_Click(object sender, RoutedEventArgs e)
         {
             var items = new List<item>();
             var loading = new Loading();
-            var RefWorker = new BackgroundWorker();
-            RefWorker.WorkerReportsProgress = true;
-            RefWorker.DoWork += new DoWorkEventHandler((r,rs) =>
+            worker = new BackgroundWorker
+            {
+                WorkerReportsProgress = true
+            };
+            worker.DoWork += new DoWorkEventHandler((r, rs) =>
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
@@ -127,12 +140,15 @@ namespace MovieRating
                     Random random = new Random();
                     List<int> Id = new List<int>();
                     for (int i = 0; i < 8; i++)
+                    {
                         Id.Add(random.Next(1, 1682));
+                    }
+
                     items = model.item.Include("ratings")
                         .Where(i => Id.Contains(i.movieId)).ToList();
                 }
             });
-            RefWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((r,rs) =>
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((r, rs) =>
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
@@ -141,7 +157,7 @@ namespace MovieRating
                 indexContent.DataContext = items;
 
             });
-            RefWorker.RunWorkerAsync();
+            worker.RunWorkerAsync();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -149,20 +165,22 @@ namespace MovieRating
             var loading = new Loading();
             var res = new List<item>();
             var searchstr = searchBox.Text;
-            var searchWorker = new BackgroundWorker();
-            searchWorker.WorkerReportsProgress = true;
-            searchWorker.DoWork += new DoWorkEventHandler((s, ss) =>
+            worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += new DoWorkEventHandler((s, ss) =>
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
                     DialogHost.Show(loading);
                 }));
                 using (var model = new RatingModel())
-                    res = model.item.Include("ratings").Where(it => it.movieTitle.Contains(searchstr)).ToList();
+                {
+                    res = model.item.Include("ratings").Where(it => it.movieTitle.ToUpper().Contains(searchstr.ToUpper())).ToList();//原来直接使用contains，导致区分大小写
+                }
                 //res = model.item.Include("ratings").Where(it => it.movieTitle.Contains(searchBox.Text)).ToList(); 
 
             });
-            searchWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((r, rs) =>
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((r, rs) =>
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
@@ -179,17 +197,26 @@ namespace MovieRating
                     ResString.Content = String.Format("共搜索到{0}条结果，已全部显示。", res.Count);
                 }
             });
-            searchWorker.RunWorkerAsync();
+            worker.RunWorkerAsync();
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-
+            var ModifiedUser = new user
+            {
+                userId=(short)Userinfo.currentUser,
+                occupationId = (byte)occupation.SelectedIndex,
+                age = Convert.ToByte(age.Text),
+                gender = gender.SelectedIndex == 0 ? "M" : "F",
+                zipcode = zipcode.Text
+            };
+            using (var model = new RatingModel())
+            {
+                model.user.Attach(ModifiedUser);
+                model.Entry(ModifiedUser).State = System.Data.Entity.EntityState.Modified;
+                await model.SaveChangesAsync();
+            }
+            UserBinding();
         }
 
         public void UserBinding()
@@ -197,16 +224,12 @@ namespace MovieRating
             var loading = new Loading();
             List<item> items = new List<item>();
             user usr = new user();
+            int ratedCount = 0;
             var occupList = new List<String>();
-            var UserWorker = new BackgroundWorker();
-            UserWorker.WorkerReportsProgress = true;
-            UserWorker.DoWork += new DoWorkEventHandler((s, es) =>
+            worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += new DoWorkEventHandler((s, es) =>
             {
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    login.close.Command?.Execute(login.close.Command);                    
-                    DialogHost.Show(loading);
-                }));
                 using (var model = new RatingModel())
                 {
                     //var itm = model.item.Include("ratings").SelectMany(it => it.ratings).Where(r => r.userId == Userinfo.currentUser).Select(r => r.item).Distinct().ToList();
@@ -217,62 +240,76 @@ namespace MovieRating
                     //          join r in model.ratings on p.movieId equals r.movieId
                     //          where r.userId == Userinfo.currentUser
                     //          select p;
+                    ratedCount = itm.Count;
                     Random random = new Random();
-                    if (itm.Count < 11 && itm.Count > 0)
+                    if (itm.Count < 11)
+                    {
                         items = itm;
+                        System.Threading.Thread.Sleep(1000);//如果数据量太少，就休眠一秒，防止loading的关闭事件在show之前发生
+                    }
+
                     else
                     {
                         for (int i = 0; i < 10; i++)
                         {
-                            if (itm.Count == 0)
-                                break;
+
                             var oneitem = itm[random.Next(0, itm.Count - 1)];//随机选择一个电影条目
                             items.Add(oneitem);//添加到要绑定的列表中
                             itm.Remove(oneitem);//从查询结果中删除
-                        } 
+                        }
                     }
                     usr = model.user.Find(Userinfo.currentUser);
                     var occupations = model.occupation;
                     foreach (var occup in occupations)
+                    {
                         occupList.Add(occup.occupation1);
+                    }
                 }
             }
             );
-            UserWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((s, es) =>
+            worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler((s, es) =>
               {
-                  Dispatcher.Invoke(new Action(() =>
-                  {
-                      loading.close.Command?.Execute(loading.close.Command);
-                  }));
+
+                  
+                  //loading.CloseMe();
                   myRating.DataContext = items;
+                  loading.close.Command?.Execute(loading.close.Command);
                   expander.Header = String.Format("个人信息(uid:{0})", usr.userId);
+                  ratingCount.Text = String.Format("我评过的影片(共{0}部，已显示{1}部)", ratedCount, items.Count);
                   zipcode.Text = usr.zipcode;
-                  gender.SelectedIndex = (usr.gender=="M")?0:1;
+                  gender.SelectedIndex = (usr.gender == "M") ? 0 : 1;
                   age.Text = usr.age.ToString();
                   occupation.DataContext = occupList;
                   occupation.SelectedIndex = usr.occupationId;
-                  tab.SelectedIndex = 2;
+                  tab.SelectedIndex = 2;                  
+                  IndexBinding();
               });
-            UserWorker.RunWorkerAsync();
-            
+            login.close.Command?.Execute(login.close.Command);
+            DialogHost.Show(loading);
+            worker.RunWorkerAsync();
         }
 
         private void Tab_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if(Userinfo.currentUser== 37787)
-            { 
+            if (Userinfo.currentUser == 37787)
+            {
                 if (tab.SelectedIndex == 2)
                 {
                     tab.SelectedIndex = lastSelectionIndex;
-                    login = new LoginPopup (this);
+                    login = new LoginPopup(this);
                     DialogHost.Show(login, "RootDialog");
                 }
                 //tab.SelectedIndex = 2;
-                
-                else lastSelectionIndex = tab.SelectedIndex;
+
+                else
+                {
+                    lastSelectionIndex = tab.SelectedIndex;
+                }
             }
- 
-            
+
+
         }
+
+        private void RefreshU_Click(object sender, RoutedEventArgs e) => UserBinding();
     }
 }

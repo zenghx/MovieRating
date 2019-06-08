@@ -34,3 +34,8 @@ https://www.codercto.com/a/52275.html
  https://stackoverflow.com/a/34400406
 
  随机数重复，范围较小
+
+ https://www.cnblogs.com/SeNaiTes/p/10584281.html
+
+
+ https://www.cnblogs.com/Hai--D/p/4545940.html

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MovieRating
+﻿namespace MovieRating
 {
     class Userinfo
     {
