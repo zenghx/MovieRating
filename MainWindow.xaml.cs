@@ -33,6 +33,7 @@ namespace MovieRating
             CommandBindings.Add(new CommandBinding(SystemCommands.ShowSystemMenuCommand, ShowSystemMenu));
             InitializeComponent();
             IndexBinding();
+
         }
 
 
@@ -110,21 +111,26 @@ namespace MovieRating
         //首页数据绑定，同步加载
         private void IndexBinding()//不知道为什么这个不能用backgroundworker异步运行，加载框关不掉
         {
-
-            using (var model = new RatingModel())
+            try
             {
-                //Random random = new Random();
-                //List<int> Id = new List<int>();
-                //for (int i = 0; i < 8; i++)
-                //{
-                //    Id.Add(random.Next(1, 1682));
-                //}
+                using (var model = new RatingModel())
+                {
+                    //Random random = new Random();
+                    //List<int> Id = new List<int>();
+                    //for (int i = 0; i < 8; i++)
+                    //{
+                    //    Id.Add(random.Next(1, 1682));
+                    //}
 
-                var items = model.item.Include("ratings").OrderBy(i => Guid.NewGuid())
-                    .Take(8).ToList();//从数据库随机获取8个条目
-                indexContent.DataContext = items;//显示到首页
+                    var items = model.item.Include("ratings").OrderBy(i => Guid.NewGuid())
+                        .Take(8).ToList();//从数据库随机获取8个条目
+                    indexContent.DataContext = items;//显示到首页
+                }
             }
-
+            catch (Exception)
+            {
+                Application.Current.Shutdown();                
+            }
         }
 
         //再次随机获取8个条目到首页，异步加载
