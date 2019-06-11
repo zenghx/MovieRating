@@ -75,6 +75,7 @@
             <local:LoginConverter x:Key="lgc"/>
             <local:RatingBarValueConverter x:Key="rtbvc"/>
             <local:AdminConverter x:Key="adc"/>
+            <!--ItemsControl的模板，定义每一个条目显示的样式-->
             <DataTemplate x:Key="itemTemplate">
                     <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}"
                                                     Margin="10"
@@ -141,6 +142,7 @@
                         </materialDesign:Flipper.BackContent>
                     </materialDesign:Flipper>
                 </DataTemplate>
+            <!--定义ItemsControl使用的Panel样式-->
             <ItemsPanelTemplate x:Key="itemsPanelTemplate">
                 <WrapPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </ItemsPanelTemplate>

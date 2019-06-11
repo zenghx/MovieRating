@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:MovieRating"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         FontFamily="Segoe UI SemiBold"
-        MinWidth="280"
+        MinWidth="350"
+        MinHeight="500"
         Title="评分系统"
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowStyle}"
@@ -17,7 +18,7 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
     </Window.Resources>
     <materialDesign:DialogHost Identifier="RootDialog"  >
-            <dragablz:TabablzControl x:Name="tab" SelectionChanged="Tab_SelectionChanged" >
+            <dragablz:TabablzControl x:Name="tab" SelectionChanged="Tab_SelectionChanged" FixedHeaderCount="3" >
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController />
                 </dragablz:TabablzControl.InterTabController>

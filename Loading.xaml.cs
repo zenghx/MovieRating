@@ -11,11 +11,5 @@ namespace MovieRating
         {
             InitializeComponent();
         }
-
-        public int CloseMe()
-        {
-            close.Command.Execute(close.Command);
-            return 1;
-        }
     }
 }

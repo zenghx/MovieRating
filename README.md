@@ -39,3 +39,5 @@ https://www.codercto.com/a/52275.html
 
 
  https://www.cnblogs.com/Hai--D/p/4545940.html
+
+ 随机取十条记录，一开始全部取出来到list里再随机List中取，后来改成查询结果就是随机的少量数据，大大降低内存占用 https://bbs.csdn.net/topics/390735218
