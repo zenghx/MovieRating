@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Xml;
@@ -52,34 +53,37 @@ namespace MovieRating
             var tt = value.ToString().Split(new Char[] { '(', ')' });//对传入的电影标题（标题 (年份)）形式进行分割，提取出年份和片名
             var URLTitle = tt[0].Trim().Replace("%", "%25").Replace("+", "%2B").Replace(' ', '+').Replace("&", "%26").Replace("#", "%23").Replace("?", "%3F").Replace("/", "%2F").Replace("=", "%3D");
             //对标题进行URL转义，将不能直接接收的字符转为相应的转义符，注意加号要先转然后就可以用加号代表空格,百分号一定要在最前替换
+            string imagePath=string.Empty;
+            string xmlUrl=string.Empty;
             try
             {
                 var requesturl = "http://www.omdbapi.com/?apikey=85486115&r=xml&t=" + URLTitle + "&y=" + tt[tt.Length - 2];//拼接出api访问URL
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requesturl);
-                var response = (HttpWebResponse)request.GetResponse();//获取响应
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string xmlUrl = reader.ReadToEnd();//获取xml字符串
-                reader.Close();
-                response.Close();
+                request.Timeout = 2000;//设置超时为两秒
+                using (var response = request.GetResponse())//获取响应
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        xmlUrl = reader.ReadToEnd();                //获取xml字符串
+                    }
+                }               
                 //实例Xml文档
                 XmlDocument xmlDoc = new XmlDocument();
                 //从指定字符串载入xml文档
                 xmlDoc.LoadXml(xmlUrl);
                 //从xml中获取海报URL
-                string imagePath = xmlDoc.DocumentElement.FirstChild.Attributes["poster"].Value;
+                imagePath = xmlDoc.DocumentElement.FirstChild.Attributes["poster"].Value;
                 if (imagePath == "N/A")//如果XML中说明没有海报
                 {
-                    return "/Resources/noImg.png";//使用默认图
+                    imagePath = "/Resources/noImg.png";//使用默认图
                 }
-
-                return imagePath;
-
             }
             catch (Exception)//访问API出现错误（找不到片名等）
             {
 
-                return "/Resources/noImg.png";//使用默认图
+                imagePath = "/Resources/noImg.png";//使用默认图
             }
+            return imagePath;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
